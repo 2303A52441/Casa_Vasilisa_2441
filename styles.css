@@ -125,4 +125,62 @@ form{display:grid;gap:.8rem} .footer{text-align:center;color:var(--muted);paddin
   70%{transform:translate(-50%,-130px) rotate(280deg);opacity:1}
   100%{transform:translate(-50%,-170px) rotate(360deg);opacity:0}
 }
+/* 🌸 Empty cart styling */
+.empty-cart {
+  position: relative;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border-radius: 18px;
+  background: var(--card, #fffafc);
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+.empty-cart h2 { font-size: 1.5rem; color: #6b4eff; margin-top: 1rem; }
+.empty-cart .muted { color: #777; margin-bottom: 1.5rem; }
+.empty-cart .btn, .empty-cart .ghost {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  margin: 0.3rem;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+}
+.empty-cart .btn {
+  background: linear-gradient(135deg, #b897ff, #ff9fbd);
+  color: white;
+}
+.empty-cart .ghost {
+  border: 1px solid #b897ff;
+  color: #b897ff;
+  background: white;
+}
 
+/* 🌟 Cute bubbles and sparkles */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: float 6s ease-in-out infinite;
+}
+.bA { width:110px;height:110px;left:8%;top:20%;
+  background:radial-gradient(circle at 40% 35%, #fff 0, #ffd7f0 60%, #ff9fd0 100%); }
+.bB { width:80px;height:80px;right:10%;top:15%;
+  background:radial-gradient(circle at 45% 40%, #fff 0, #ded7ff 60%, #a99aff 100%);animation-delay:.5s;}
+.bC { width:64px;height:64px;right:18%;bottom:12%;
+  background:radial-gradient(circle at 50% 45%, #fff 0, #ffe8c2 60%, #ffc26b 100%);animation-delay:.9s;}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+
+/* Sparkles ✨ */
+.sparkles { position:absolute;inset:0;pointer-events:none;opacity:.6; }
+.sparkles span {
+  position:absolute;width:8px;height:8px;
+  background:radial-gradient(circle,#fff,rgba(255,255,255,.7));
+  border-radius:50%;animation:twinkle 3s infinite ease-in-out;
+}
+@keyframes twinkle {0%,100%{opacity:.5}50%{opacity:1;transform:scale(1.2)}}
+
+/* Cute eyes 👀 */
+.eyes {position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.5rem;}
+.eye {width:14px;height:14px;background:#222;border-radius:50%;animation:blink 5s infinite;}
+@keyframes blink {0%,4%,100%{transform:scaleY(1)}2%{transform:scaleY(.1)}}
