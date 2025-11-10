@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Cart • Café & Stories</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head><body class="container">
+<h1>🛒 Your Cart</h1>
+<div id="cart" class="card"></div>
+<p id="msg" class="muted" style="margin-top:.6rem"></p>
+<p><a href="index.html">Back to Home</a></p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+async function requireUser(){ const { data: { user } } = await sb.auth.getUser(); if(!user) location.href='login.html'; return user; }
+async function loadCart(){
+  const user = await requireUser();
+  const { data, error } = await sb.from('cart_items').select('id,item_name,price,qty').eq('user_id', user.id).order('id',{ascending:false});
+  const div=document.getElementById('cart'); if(error){ div.textContent=error.message; return; }
+  if(!data||data.length===0){ div.innerHTML="<p class='muted'>Empty. Add some cozy items ☕📚</p>"; return; }
+  let total=0; div.innerHTML = "<ul>"+data.map(r=>{ total+=(r.price||0)*(r.qty||1); return `<li>${r.item_name} — ₹${r.price} × ${r.qty}</li>`; }).join("")+"</ul><p><strong>Total:</strong> ₹"+total+"</p>";
+}
+loadCart();
+</script>
+</body></html>

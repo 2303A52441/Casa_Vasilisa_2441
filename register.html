@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register • Café & Stories</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head><body class="container">
+<h1>Create account ✨</h1>
+<p class="muted">Sign up to save your cart and reading wishlist.</p>
+<form id="register-form" class="card" style="max-width:520px">
+  <label>Full Name</label><input name="full_name" required>
+  <label>Email</label><input type="email" name="email" required>
+  <label>Password</label><input type="password" name="password" minlength="6" required>
+  <button class="btn">Sign up</button>
+</form>
+<p id="msg" class="muted" style="margin-top:.6rem"></p>
+<p><a href="login.html">Already have an account? Login</a></p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+const form=document.getElementById('register-form'), msg=document.getElementById('msg');
+form.addEventListener('submit',async(e)=>{e.preventDefault(); msg.textContent='Creating account...';
+  const v=Object.fromEntries(new FormData(form));
+  const {error}=await sb.auth.signUp({email:v.email,password:v.password,options:{data:{full_name:v.full_name}}});
+  msg.textContent = error? error.message : 'Check your email to confirm your account 📬';
+  if(!error) form.reset();
+});
+</script>
+</body></html>

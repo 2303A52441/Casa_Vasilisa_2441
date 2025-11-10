@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login • Café & Stories</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head><body class="container">
+<h1>Welcome back ☕</h1>
+<form id="login-form" class="card" style="max-width:520px">
+  <label>Email</label><input type="email" name="email" required>
+  <label>Password</label><input type="password" name="password" required>
+  <button class="btn">Login</button>
+</form>
+<p id="msg" class="muted" style="margin-top:.6rem"></p>
+<p><a href="register.html">Create an account</a></p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+const form=document.getElementById('login-form'), msg=document.getElementById('msg');
+form.addEventListener('submit',async(e)=>{e.preventDefault(); msg.textContent='Logging in...';
+  const v=Object.fromEntries(new FormData(form));
+  const {error}=await sb.auth.signInWithPassword({email:v.email,password:v.password});
+  msg.textContent = error? error.message : 'Success! Redirecting...';
+  if(!error) setTimeout(()=>location.href='profile.html',600);
+});
+</script>
+</body></html>

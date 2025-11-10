@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings • Café & Stories</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head><body class="container">
+<h1>Settings ⚙️</h1>
+<div class="card" style="max-width:560px">
+  <form id="name-form">
+    <label>Full Name</label><input name="full_name" placeholder="Your name">
+    <button class="btn" type="submit">Update Name</button>
+  </form>
+  <hr style="margin:1rem 0;border:none;border-top:1px solid rgba(120,90,200,.25)">
+  <form id="pass-form">
+    <label>New Password</label><input type="password" name="password" minlength="6" placeholder="••••••">
+    <button class="btn" type="submit">Change Password</button>
+  </form>
+</div>
+<p id="msg" class="muted" style="margin-top:.6rem"></p>
+<p><a href="profile.html">Back to Profile</a></p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+(async()=>{ const {data:{user}}=await sb.auth.getUser(); if(!user){ location.href='login.html'; return; }
+  document.querySelector('input[name="full_name"]').value = user.user_metadata?.full_name || "";
+})();
+const msg=document.getElementById('msg');
+document.getElementById('name-form').addEventListener('submit',async(e)=>{e.preventDefault();
+  const full_name=new FormData(e.target).get('full_name');
+  const {error}=await sb.auth.updateUser({data:{full_name}});
+  msg.textContent = error? error.message : 'Updated!';
+});
+document.getElementById('pass-form').addEventListener('submit',async(e)=>{e.preventDefault();
+  const password=new FormData(e.target).get('password');
+  const {error}=await sb.auth.updateUser({password});
+  msg.textContent = error? error.message : 'Password changed!';
+});
+</script>
+</body></html>

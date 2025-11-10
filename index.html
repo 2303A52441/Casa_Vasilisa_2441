@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Café & Stories ✨</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="nav">
+    <span class="brand"><span class="logo"></span> Café & Stories <span class="badge">📚 + ☕</span></span>
+    <div class="spacer"></div>
+    <a href="#menu">Cafe</a>
+    <a href="#books">Fiction</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Sign up</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner container">
+      <div>
+        <h1 class="title">Welcome to Café & Stories <span class="badge">new ✨</span></h1>
+        <p class="subtitle">Animated mascots, cozy coffee, and a shelf of dreamy fiction. <span class="chip">calm vibes</span> <span class="chip">pastel UI</span> <span class="chip">cute emojis</span></p>
+        <div class="cta"><a class="btn" href="#menu">Order coffee ☕</a><a class="ghost" href="#books">Browse books 📚</a></div>
+      </div>
+      <div class="mascots">
+        <div class="bubble b1"><div class="eyes"><span class="eye"></span><span class="eye"></span></div></div>
+        <div class="bubble b2"><div class="eyes"><span class="eye"></span><span class="eye"></span></div></div>
+        <div class="bubble b3"><div class="eyes"><span class="eye"></span><span class="eye"></span></div></div>
+      </div>
+    </div>
+    <div class="sparkles">
+      <span style="left:10%;top:20%"></span><span style="left:40%;top:15%"></span><span style="left:70%;top:30%"></span><span style="left:85%;top:10%"></span><span style="left:20%;top:60%"></span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="menu">
+      <h2>Café Specials ☕</h2>
+      <div class="grid">
+        <article class="card"><h3>Lavender Latte ✨</h3><p class="muted">Floral notes • dreamy foam</p><span class="price">₹220</span><br><button class="btn add" data-item="Lavender Latte" data-price="220">Add to cart</button></article>
+        <article class="card"><h3>Hazelnut Mocha 🌰</h3><p class="muted">Dark cocoa • roasted hazelnut</p><span class="price">₹210</span><br><button class="btn add" data-item="Hazelnut Mocha" data-price="210">Add to cart</button></article>
+        <article class="card"><h3>Affogato 🍨</h3><p class="muted">Vanilla gelato + espresso</p><span class="price">₹230</span><br><button class="btn add" data-item="Affogato" data-price="230">Add to cart</button></article>
+        <article class="card"><h3>Rose Cappuccino 🌹</h3><p class="muted">Microfoam • rose syrup</p><span class="price">₹200</span><br><button class="btn add" data-item="Rose Cappuccino" data-price="200">Add to cart</button></article>
+      </div>
+    </section>
+
+    <section id="books">
+      <h2>Fictional Books Corner 📚</h2>
+      <div class="grid">
+        <article class="card"><h3>Moonlit Letters 🌙</h3><p class="muted">Soft romance short stories, written like secret notes.</p><div class="chips"><span class="chip">romance</span><span class="chip">letters</span><span class="chip">calm</span></div><button class="ghost add" data-item="Moonlit Letters" data-price="299">Add to cart ₹299</button></article>
+        <article class="card"><h3>The Coffee Alchemist 🧪</h3><p class="muted">A barista who brews memories into cups.</p><div class="chips"><span class="chip">magical</span><span class="chip">cozy</span></div><button class="ghost add" data-item="The Coffee Alchemist" data-price="349">Add to cart ₹349</button></article>
+        <article class="card"><h3>Pages of Hanamkonda 🗺️</h3><p class="muted">Slice-of-life tales set in a charming town.</p><div class="chips"><span class="chip">local</span><span class="chip">warm</span></div><button class="ghost add" data-item="Pages of Hanamkonda" data-price="279">Add to cart ₹279</button></article>
+        <article class="card"><h3>Ash & Starlight ✨</h3><p class="muted">Found-family fantasy with twinkling skies.</p><div class="chips"><span class="chip">fantasy</span><span class="chip">friendship</span></div><button class="ghost add" data-item="Ash & Starlight" data-price="329">Add to cart ₹329</button></article>
+      </div>
+    </section>
+
+    <section id="visit" class="card">
+      <h2>Visit Us</h2>
+      <p class="muted">Hanamkonda • Open 12 PM – 11 PM • Cozy reading nooks 📖</p>
+      <form id="reserve-form">
+        <label>Your Name</label><input name="name" required />
+        <label>Reservation Date</label><input type="date" name="date" required />
+        <label>Notes</label><textarea name="notes" rows="4" placeholder="Reading nook for two?"></textarea>
+        <button class="btn">Reserve a table</button>
+      </form>
+      <p id="reserve-msg" class="muted" style="margin-top:.4rem"></p>
+    </section>
+  </main>
+
+  <footer class="footer">© <span id="y"></span> Café & Stories — made with love ☕📚</footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile • Café & Stories</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head><body class="container">
+<h1>Your Profile 💫</h1>
+<div id="info" class="card"></div>
+<p style="margin-top:.6rem"><a href="settings.html">Settings</a> • <a href="cart.html">Cart</a> • <a href="index.html">Home</a></p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+(async()=>{ const {data:{user}}=await sb.auth.getUser(); if(!user){ location.href='login.html'; return; }
+  const name=user.user_metadata?.full_name||'(no name)';
+  document.getElementById('info').innerHTML=`
+    <p><strong>Email:</strong> ${user.email}</p>
+    <p><strong>Name:</strong> ${name}</p>
+    <p class="muted">Member since: ${(new Date(user.created_at)).toDateString()}</p>`;
+})();
+</script>
+</body></html>
