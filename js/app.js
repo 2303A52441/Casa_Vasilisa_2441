@@ -5,7 +5,21 @@ document.querySelectorAll('.add').forEach(btn=>{
     if(!user){ alert('Please login to add items 🧁'); location.href='login.html'; return; }
     const item = btn.dataset.item, price = Number(btn.dataset.price||0);
     const { error } = await sb.from('cart_items').insert({ user_id:user.id, item_name:item, price, qty:1 });
-    if(error) alert(error.message); else btn.textContent='Added ✓';
+   if(error) {
+  alert(error.message);
+} else {
+  btn.textContent = 'Added ✓';
+  btn.classList.add('wiggle-once');
+
+  // create a tiny confetti piece 🌈
+  const piece = document.createElement('div');
+  piece.className = 'confetti';
+  piece.style.left = (btn.getBoundingClientRect().left + btn.offsetWidth/2) + 'px';
+  piece.style.top = (window.scrollY + btn.getBoundingClientRect().top) + 'px';
+  document.body.appendChild(piece);
+  setTimeout(()=>piece.remove(), 1200);
+}
+
   });
 });
 const form=document.getElementById('reserve-form'); const msg=document.getElementById('reserve-msg');
