@@ -184,3 +184,30 @@ form{display:grid;gap:.8rem} .footer{text-align:center;color:var(--muted);paddin
 .eyes {position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:.5rem;}
 .eye {width:14px;height:14px;background:#222;border-radius:50%;animation:blink 5s infinite;}
 @keyframes blink {0%,4%,100%{transform:scaleY(1)}2%{transform:scaleY(.1)}}
+.qty-box{
+  display:flex; align-items:center; gap:.5rem;
+  background:rgba(138,123,255,.10);
+  border:1px solid rgba(120,90,200,.25);
+  border-radius:12px; padding:.2rem .5rem;
+}
+.qty-btn{
+  border:none; background:#fff; width:28px; height:28px; border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.06); cursor:pointer; font-size:18px; line-height:1;
+}
+.qty-btn:active{ transform:scale(.97) }
+
+.remove-btn{
+  border:1px solid rgba(255,123,176,.5);
+  background:linear-gradient(90deg, rgba(255,123,176,.12), rgba(255,194,107,.12));
+  color:#b24b74; border-radius:10px; padding:.35rem .6rem; cursor:pointer;
+}
+
+.cart-list{list-style:none;margin:0;padding:0}
+.cart-line{
+  display:grid; grid-template-columns:1fr auto auto auto; gap:.8rem; align-items:center;
+  padding:.75rem 1rem; margin:.4rem 0; border-radius:12px;
+  background:linear-gradient(90deg,rgba(138,123,255,.10),rgba(255,123,176,.08));
+  border:1px solid rgba(120,90,200,.20);
+}
+.cart-name{font-weight:700}
+.cart-price{justify-self:end}

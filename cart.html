@@ -1,118 +1,132 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Your Cart • Café & Stories</title>
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-</head><body class="container">
-<h1>🛒 Your Cart</h1>
-<div id="cart" class="card"></div>
-<p id="msg" class="muted" style="margin-top:.6rem"></p>
-<p><a href="index.html">Back to Home</a></p>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script>
-const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Cart • Café & Stories</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="container">
+  <h1>🛒 Your Cart</h1>
+  <div id="cart" class="card"></div>
+  <p style="margin-top:.6rem"><a href="index.html">Back to Home</a></p>
 
-async function requireUser(){ 
-  const { data: { user } } = await sb.auth.getUser(); 
-  if(!user) location.href='login.html'; 
-  return user; 
-}
+  <!-- Order matters: library -> config -> page code -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script>
+  const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
-function renderEmptyCart() {
-  const div = document.getElementById('cart');
-  div.innerHTML = `
-    <div class="empty-cart">
-      <div class="bubble bA"><div class="eyes"><span class="eye"></span><span class="eye"></span></div></div>
-      <div class="bubble bB"></div>
-      <div class="bubble bC"></div>
-      <div class="sparkles">
-        <span style="left:12%;top:18%"></span>
-        <span style="left:70%;top:10%"></span>
-        <span style="left:82%;top:55%"></span>
-        <span style="left:28%;top:70%"></span>
-      </div>
-      <h2>Your cart is feeling light ✨</h2>
-      <p class="muted">Add a cozy drink or a dreamy book ☕📚</p>
-      <a class="btn" href="index.html#menu">Browse café</a>
-      <a class="ghost" href="index.html#books">Browse books</a>
-    </div>
-  `;
-}
-
-function confettiOnce(node) {
-  const piece = document.createElement('div');
-  piece.className = 'confetti';
-  piece.style.left = (node.getBoundingClientRect().left + node.offsetWidth/2) + 'px';
-  piece.style.top = (window.scrollY + node.getBoundingClientRect().top) + 'px';
-  document.body.appendChild(piece);
-  setTimeout(()=>piece.remove(), 1200);
-}
-
-async function loadCart(){
-  const user = await requireUser();
-  const { data, error } = await sb
-    .from('cart_items')
-    .select('id,item_name,price,qty')
-    .eq('user_id', user.id)
-    .order('id',{ascending:false});
-
-  const div = document.getElementById('cart');
-  if(error){ div.textContent = error.message; return; }
-
-  if(!data || data.length === 0){
-  div.innerHTML = `
-    <div class="empty-cart">
-      <div class="bubble bA">
-        <div class="eyes">
-          <span class="eye"></span>
-          <span class="eye"></span>
-        </div>
-      </div>
-      <div class="bubble bB"></div>
-      <div class="bubble bC"></div>
-      <div class="sparkles">
-        <span style="left:12%;top:18%"></span>
-        <span style="left:70%;top:10%"></span>
-        <span style="left:82%;top:55%"></span>
-        <span style="left:28%;top:70%"></span>
-      </div>
-      <h2>Your cart is feeling light ✨</h2>
-      <p class="muted">Add a cozy drink or a dreamy book ☕📚</p>
-      <a class="btn" href="index.html#menu">Browse Café</a>
-      <a class="ghost" href="index.html#books">Browse Books</a>
-    </div>
-  `;
-  return;
-}
-
+  async function requireUser(){ 
+    const { data: { user } } = await sb.auth.getUser(); 
+    if(!user) { location.href='login.html'; return null; }
+    return user; 
   }
 
-  let total = 0;
-  const rows = data.map(r => {
-    const line = (r.price||0) * (r.qty||1);
-    total += line;
-    return `
-      <li class="cart-line">
-        <span class="cart-name">${r.item_name}</span>
-        <span class="cart-qty">× ${r.qty}</span>
-        <span class="cart-price">₹${r.price}</span>
-      </li>`;
-  });
+  function renderEmptyCart() {
+    const div = document.getElementById('cart');
+    div.innerHTML = `
+      <div class="empty-cart">
+        <div class="bubble bA"><div class="eyes"><span class="eye"></span><span class="eye"></span></div></div>
+        <div class="bubble bB"></div>
+        <div class="bubble bC"></div>
+        <div class="sparkles">
+          <span style="left:12%;top:18%"></span>
+          <span style="left:70%;top:10%"></span>
+          <span style="left:82%;top:55%"></span>
+          <span style="left:28%;top:70%"></span>
+        </div>
+        <h2>Your cart is feeling light ✨</h2>
+        <p class="muted">Add a cozy drink or a dreamy book ☕📚</p>
+        <a class="btn" href="index.html#menu">Browse Café</a>
+        <a class="ghost" href="index.html#books">Browse Books</a>
+      </div>
+    `;
+  }
 
-  div.innerHTML = `
-    <ul class="cart-list">${rows.join("")}</ul>
-    <p class="cart-total"><strong>Total:</strong> ₹${total}</p>
-    <button id="payBtn" class="btn">Proceed to Payment 💳</button>
-  `;
+  async function updateQty(id, newQty){
+    if(newQty <= 0){
+      const { error } = await sb.from('cart_items').delete().eq('id', id);
+      if (error) alert('DB error: ' + error.message);
+    } else {
+      const { error } = await sb.from('cart_items').update({ qty: newQty }).eq('id', id);
+      if (error) alert('DB error: ' + error.message);
+    }
+  }
 
-  document.getElementById('payBtn').addEventListener('click', (e)=>{
-    confettiOnce(e.target);
-    alert('✨ Payment successful! Your order is on the way ☕📚');
-  });
-}
+  async function removeItem(id){
+    const { error } = await sb.from('cart_items').delete().eq('id', id);
+    if (error) alert('DB error: ' + error.message);
+  }
 
-loadCart();
+  async function loadCart(){
+    const user = await requireUser();
+    if(!user) return;
 
-</script>
-</body></html>
+    const { data, error } = await sb
+      .from('cart_items')
+      .select('id,item_name,price,qty')
+      .eq('user_id', user.id)
+      .order('id',{ascending:false});
+
+    const div = document.getElementById('cart');
+    if(error){ div.textContent = 'DB error: ' + error.message; return; }
+
+    if(!data || data.length === 0){ renderEmptyCart(); return; }
+
+    let total = 0;
+    const rows = data.map(r => {
+      const qty = Number(r.qty)||1, price = Number(r.price)||0;
+      total += qty * price;
+      return `
+        <li class="cart-line" data-id="${r.id}">
+          <span class="cart-name">${r.item_name}</span>
+          <div class="qty-box">
+            <button class="qty-btn dec" aria-label="decrease">−</button>
+            <span class="cart-qty">${qty}</span>
+            <button class="qty-btn inc" aria-label="increase">+</button>
+          </div>
+          <span class="cart-price">₹${price}</span>
+          <button class="remove-btn" aria-label="remove">Remove</button>
+        </li>`;
+    }).join("");
+
+    div.innerHTML = `
+      <ul class="cart-list">${rows}</ul>
+      <p class="cart-total"><strong>Total:</strong> ₹${total}</p>
+      <button id="payBtn" class="btn">Proceed to Payment 💳</button>
+    `;
+
+    // wire qty +/- and remove
+    div.querySelectorAll('.cart-line').forEach(line => {
+      const id = Number(line.dataset.id);
+      const qtyEl = line.querySelector('.cart-qty');
+
+      line.querySelector('.inc').addEventListener('click', async ()=>{
+        const newQty = Number(qtyEl.textContent) + 1;
+        await updateQty(id, newQty);
+        await loadCart();
+      });
+
+      line.querySelector('.dec').addEventListener('click', async ()=>{
+        const newQty = Number(qtyEl.textContent) - 1;
+        await updateQty(id, newQty);
+        await loadCart();
+      });
+
+      line.querySelector('.remove-btn').addEventListener('click', async ()=>{
+        await removeItem(id);
+        await loadCart();
+      });
+    });
+
+    document.getElementById('payBtn').addEventListener('click', ()=>{
+      alert('✨ Payment successful! Your order is on the way ☕📚');
+    });
+  }
+
+  loadCart();
+  </script>
+</body>
+</html>
