@@ -2,17 +2,14 @@ const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANO
 // 💕 Handle "Add to cart" clicks
 document.querySelectorAll('.add').forEach(btn=>{
   btn.addEventListener('click', async ()=>{
-    const { data:{ user } } = await sb.auth.getUser();
-    if(!user){ 
-      alert('Please login to add items 🧁'); 
-      location.href='login.html'; 
-      return; 
-    }
+    const { data:{ user }, error: authErr } = await sb.auth.getUser();
+    if (authErr) { alert('Auth error: ' + authErr.message); return; }
+    if (!user)    { alert('Please login to add items 🧁'); location.href='login.html'; return; }
 
-    const item = btn.dataset.item;
+    const item  = btn.dataset.item;
     const price = Number(btn.dataset.price || 0);
 
-    // 🔎 1. check if the item already exists for this user
+    // Check if item exists -> increment qty
     const { data: existing, error: selErr } = await sb
       .from('cart_items')
       .select('id, qty')
@@ -21,28 +18,20 @@ document.querySelectorAll('.add').forEach(btn=>{
       .limit(1)
       .maybeSingle();
 
-    if (selErr) {
-      alert('Error checking cart: ' + selErr.message);
-      return;
+    if (selErr) { alert('Select error: ' + selErr.message); return; }
+
+    let res;
+    if (existing) {
+      res = await sb.from('cart_items').update({ qty: existing.qty + 1 }).eq('id', existing.id);
+    } else {
+      res = await sb.from('cart_items').insert({ user_id: user.id, item_name: item, price, qty: 1 });
     }
 
-    // 🧮 2. if exists, increase qty — else insert new row
-    if (existing) {
-      const { error } = await sb
-        .from('cart_items')
-        .update({ qty: existing.qty + 1 })
-        .eq('id', existing.id);
-      if (error) alert(error.message);
-      else btn.textContent = 'Added ✓';
-    } else {
-      const { error } = await sb
-        .from('cart_items')
-        .insert({ user_id: user.id, item_name: item, price, qty: 1 });
-      if (error) alert(error.message);
-      else btn.textContent = 'Added ✓';
-    }
+    if (res.error) { alert('DB error: ' + res.error.message); console.error(res.error); }
+    else { btn.textContent = 'Added ✓'; }
   });
 });
+
 const form=document.getElementById('reserve-form'); const msg=document.getElementById('reserve-msg');
 if(form){ form.addEventListener('submit', async (e)=>{
   e.preventDefault(); msg.textContent='Saving reservation...';
