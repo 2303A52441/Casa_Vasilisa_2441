@@ -14,15 +14,38 @@
 <p><a href="register.html">Create an account</a></p>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+
 <script>
-const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-const s = await sb.auth.getUser(); s
-const form=document.getElementById('login-form'), msg=document.getElementById('msg');
-form.addEventListener('submit',async(e)=>{e.preventDefault(); msg.textContent='Logging in...';
-  const v=Object.fromEntries(new FormData(form));
-  const {error}=await sb.auth.signInWithPassword({email:v.email,password:v.password});
-  msg.textContent = error? error.message : 'Success! Redirecting...';
-  if(!error) setTimeout(()=>location.href='profile.html',600);
-});
+  // 🧩 check if your Supabase keys are loading
+  console.log("🔍 SUPABASE_URL =", window.SUPABASE_URL);
+  console.log("🔍 SUPABASE_ANON_KEY exists =", !!window.SUPABASE_ANON_KEY);
+
+  // 💫 create Supabase client once
+  const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+  // 🪄 form and message element
+  const form = document.getElementById('login-form');
+  const msg = document.getElementById('msg');
+
+  // 💌 handle submit
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.textContent = 'Logging in...';
+
+    const v = Object.fromEntries(new FormData(form));
+
+    const { data, error } = await sb.auth.signInWithPassword({
+      email: v.email,
+      password: v.password
+    });
+
+    if (error) {
+      console.error('❌ Login error:', error);
+      msg.textContent = 'Error: ' + (error.message || 'Unknown error');
+      return;
+    }
+
+    msg.textContent = 'Success! Redirecting...';
+    setTimeout(() => location.href = 'profile.html', 600);
+  });
 </script>
-</body></html>
