@@ -16,6 +16,7 @@
 <script src="js/config.js"></script>
 <script>
 const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+const s = await sb.auth.getUser(); s
 const form=document.getElementById('login-form'), msg=document.getElementById('msg');
 form.addEventListener('submit',async(e)=>{e.preventDefault(); msg.textContent='Logging in...';
   const v=Object.fromEntries(new FormData(form));
